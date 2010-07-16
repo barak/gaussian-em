@@ -165,7 +165,7 @@ double det_twod(twod m)
 	double d=1;
 	lu_decompose(m,l,u);
 	FOR(i,D)
-	  d *= l[i][i] * u[i][i];
+	  d *= u[i][i];
 	return d;
       }
     }
