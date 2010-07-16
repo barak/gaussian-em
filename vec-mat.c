@@ -212,7 +212,7 @@ void solve_linear_system(int n, double (*mm)[n], double *b, double *x)
 
   /* Forward pass: */
 
-  FOR(i,n) {
+  for (i=0; i<n; i++) {
     a = 1/m[i][i];
     /* multiply row i by a: */
     for (j=i+1; j<n; j++)
