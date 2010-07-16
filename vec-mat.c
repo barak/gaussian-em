@@ -37,7 +37,7 @@ void point_diff(point x, point y, point z)
     z[i] = x[i] - y[i];
 }
 
-/* vector difference */
+/* add scaled point to target point */
 void add_scaled_point(point x, double s, point y)
 {
   int i;
