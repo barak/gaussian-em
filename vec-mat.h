@@ -26,6 +26,7 @@ extern double det_twod(twod m);
 extern double det_diag(diag m);
 extern void solve_linear_system(int n, double (*mm)[n], double *b, double *x);
 extern void solve_diag_system(diag m, point b, point x);
+extern void solve_linear_system_lu(int n, double (*l)[n], double (*u)[n], double *b, double *x);
 extern void twod_add_outer_prod(point p, twod m, double scale);
 extern void diag_add_outer_prod(point p, diag m, double scale);
 extern double inner_prod(point p, twod m);

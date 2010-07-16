@@ -212,7 +212,7 @@ void solve_linear_system(int n, double (*mm)[n], double *b, double *x)
 
   /* Forward pass: */
 
-  for (i=0; i<n; i++) {
+  FOR(i,n) {
     a = 1/m[i][i];
     /* multiply row i by a: */
     for (j=i+1; j<n; j++)
@@ -246,6 +246,34 @@ void solve_diag_system(diag m, point b, point x)
   int i;
   FOR(i,D)
     x[i] = b[i] / m[i];
+}
+
+/* This solves the matrix equation Mx=b for x (M=mm, an n by n
+   matrix).  Only x is modified.
+   It is passed the LU-decomposition of M.
+   l is lower triangular with unit diagonal.
+   u is upper triangular. */
+
+void solve_linear_system_lu(int n, double (*l)[n], double (*u)[n],
+			    double *b, double *x)
+{
+  int i,j;
+  /* Solve M x = (L U) x = L (U x) = L y = b, first find y, then find x. */
+
+  /* Use x for storing y in first step.  */
+
+  FOR(i,n)
+    x[i] = b[i];
+
+  /* Step 1: solve L y = b for y */
+  for (i=0; i<n; i++)
+    for (j=i+1; j<n; j++)
+      x[j] -= x[i] * l[i][j];
+
+  /* Step 2: solve U x = y for x */
+  for (i=n-1; i>=0; i--)
+    for (j=i-1; j>=0; j--)
+      x[j] -= x[i] * u[i][j] / u[i][i];
 }
 
 /* outer product */
