@@ -19,8 +19,6 @@
 #include <ctype.h>
 #include <stdlib.h>
 
-extern _filbuf(), fscanf(), fprintf(), printf(), fclose(), ungetc();
-
 typedef double spoint[D];	/* vector */
 typedef double stwod[D][D];	/* matrix */
 typedef double sdiag[D];	/* diagonal matrix */
@@ -256,7 +254,6 @@ double det_diag(diag m)
     }
 }
 
-  
 double det(mat m)
 {
   return dchoose(det_diag,det_twod)(m);
@@ -434,7 +431,6 @@ double normalize(double *p, int k)
   return total;
 }
 
-
 void re_estimate(spoint *data, struct cluster *class)
 {
   int i,k;
@@ -456,7 +452,7 @@ void re_estimate(spoint *data, struct cluster *class)
 	pr[k] = class[k].prior * gaussian_pdf(data[i], &class[k].g);
 
       normalize(pr, K);
-      
+
       FOR(k,K)
 	accumulate_stats(data[i], &newclass[k], pr[k]);
     }
