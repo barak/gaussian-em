@@ -31,6 +31,7 @@ extern void diag_add_outer_prod(point p, diag m, double scale);
 extern double inner_prod(point p, twod m);
 extern double twod_inner_prod_inv(point x, twod m);
 extern double diag_inner_prod_inv(point x, diag m);
+extern double normalize_l1(double *p, int k);
 
 typedef double spoint[D];	/* vector */
 typedef double stwod[D][D];	/* matrix */

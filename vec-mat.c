@@ -1,5 +1,4 @@
 #include "vec-mat.h"
-#include <math.h>
 
 /* square a double */
 inline double sqr(double x)
@@ -291,4 +290,17 @@ double diag_inner_prod_inv(point x, diag m)
   spoint y;
   solve_diag_system(m, x, y);
   return dot(x,y);
+}
+
+/* Normalize (so they sum to 1, i.e., unit L1 norm) the elements of a vector. */
+/* Returns previous sum. */
+double normalize_l1(double *p, int k)
+{
+  int i;
+  double total=0;
+  FOR(i,k)
+    total += p[i];
+  FOR(i,k)
+    p[i] /= total;
+  return total;
 }

@@ -63,7 +63,7 @@ double log_plus(double x, double y)
 double gaussian_pdf(point p, struct gaussian *g)
 {
   spoint x;
-  point_diff(p,g->mean,x);
+  point_diff(p, g->mean, x);
   return exp(-inner_prod_inv(x, g->covar)/2)
     / sqrt(pow(2 * M_PI, D) * g->d);
 }
@@ -104,18 +104,6 @@ void accumulate_stats(point x, struct cluster *c, double w)
   c->prior += w;
 }
 
-/* Normalize (so they sum to 1) the elements of a vector.  Returns previous sum. */
-double normalize(double *p, int k)
-{
-  int i;
-  double total=0;
-  FOR(i,K)
-    total += p[i];
-  FOR(i,K)
-    p[i] /= total;
-  return total;
-}
-
 void re_estimate(spoint *data, struct cluster *class)
 {
   int i,k;
@@ -136,7 +124,7 @@ void re_estimate(spoint *data, struct cluster *class)
       FOR(k,K)
 	pr[k] = class[k].prior * gaussian_pdf(data[i], &class[k].g);
 
-      normalize(pr, K);
+      normalize_l1(pr, K);
 
       FOR(k,K)
 	accumulate_stats(data[i], &newclass[k], pr[k]);
