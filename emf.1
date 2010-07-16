@@ -1,0 +1,93 @@
+Documentation for the emf program.
+
+This program runs EM with a d-dimensional gaussian mixture model,
+with full covariance matrices, and mutable mixing ratios.
+
+Usage: emf epochs data clusters [labels [data n]].
+
+where:	epochs is the number of iterations of EM to run,
+	data is the file of data to read, consisting of N
+		d-dimensional points.
+	clusters is the file of initial values for the mixture model
+	labels (optional) is a file to write the probabilities of the
+		datapoints to following the final EM iteration
+	data (optional) is a file of data to read the datapoints whose
+		probabilities are to be written to (optional)
+	n (optional) is the number of points in that second data file
+
+At the end of the run, the final state of the mixture model is written
+to standard output.
+
+To change the dimensionality (D), the number of gaussians in the
+mixture (K), or number of points in the dataset EM is used on (D), you
+have to recompile the program, thus:
+
+	gcc -DD=xxx -DK=xxx -DN=xxx -O2 -s -o emf emf.c
+
+By default full covariance matrices are used, if you want diagonal
+ones instead add a -DDIAGONAL to the compilation.
+
+All data and initialization files can contain comments, which consist
+of a ; to the end of the line.  Such a file looks something like this:
+
+	; 121 datapoints, 2 clusters, 2-dimensional.
+	; Initial sum of priors 1.
+	;;; Epoch 200.
+	;; Cluster 0
+	; prior
+	0.475973
+	; mean
+	 5 22.2657
+	; covariance matrix
+	    10 1.42109E-14
+	    1.42109E-14 274.821
+
+	;; Cluster 1
+	; prior
+	0.524027
+	; mean
+	 5 75.1909
+	; covariance matrix
+	    10 2.84217E-13
+	    2.84217E-13 325.442
+
+while a reasonable initialization file before EM had run might look
+something like this:
+
+	; 2 clusters, 2-dimensional.
+	; init file
+	;; Cluster 0
+	; prior
+	0.5
+	; mean
+	0 0
+	; covariance matrix
+	 1 0
+	 0 1
+
+	;; Cluster 1
+	; prior
+	0.5
+	; mean
+	2 3
+	; covariance matrix
+	 1 0
+	 0 1
+
+All the comments are just that, of course, so be careful.  (You can
+always run emf for 0 epochs to see if it agrees with you about the
+semantics of the numbers in your file.)
+
+			  Potential Pitfalls
+
+If the initialization file is bad obviously you can run into trouble.
+Eg if some datapoint has super low probability so it underflows really
+far (this could be fixed if I went to a lot of trouble), or if one
+cluster is hugging just one point so EM converges to a singularity
+(this problem is inherent to maximum likelihood EM).  So be careful
+out there!
+
+			 Resource Consumption
+
+The updates are O(N K D^2 + K D^3) time, and the program uses
+O(N D + K D^2) space.
