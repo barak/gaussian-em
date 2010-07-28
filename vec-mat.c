@@ -138,13 +138,13 @@ void lu_decompose(twod m, twod l, twod u)
   /* set u = m */
   copy_twod(m, u);
   /* apply row operations to zero out sub-diagonal elements of u. */
-  /* apply same row ops to l. */
+  /* apply inverse of these row ops to l. */
   for (i=0; i<D-1; i++) {
     double a = u[i][i];
     for (j=i+1; j<D; j++) {
       double s = - u[i][j] / a;
       add_scaled_point(u[i], s, u[j]);
-      add_scaled_point(l[i], s, l[j]);
+      add_scaled_point(l[i], -s, l[j]);
     }
   }
 }
